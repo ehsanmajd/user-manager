@@ -1,0 +1,50 @@
+.task {
+    /* position: relative;
+    background-color: #ccc;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 5px;
+    opacity: 1; */
+
+}
+
+.task.completed {
+  /* opacity: 0.5; */
+}
+
+/* 
+.task button {
+    margin: 0 0px 0 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.task div {
+    display: flex;
+    align-items: center;
+    width: auto;
+    height: 30px;
+    flex: 1;
+    margin-left: 10px;
+    color: #222;
+}
+
+.task button>svg {
+    pointer-events: none;
+}
+
+.task span {
+    margin-right: 6px;
+    text-align: center;
+} */
