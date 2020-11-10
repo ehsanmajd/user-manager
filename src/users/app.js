@@ -18,6 +18,7 @@ class Wrapper extends React.Component {
   render() {
     return (
       <div style={{ height: '200px', width: '200px', backgroundColor: this.props.color }}>
+        <input />
         {this.props.children}
       </div>
     )
