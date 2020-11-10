@@ -18,7 +18,6 @@ class Wrapper extends React.Component {
   render() {
     return (
       <div style={{ height: '200px', width: '200px', backgroundColor: this.props.color }}>
-        <input />
         {this.props.children}
       </div>
     )
@@ -28,7 +27,9 @@ class Wrapper extends React.Component {
 export default class App extends React.Component {
   render() {
     return (
-      <Router foo='bar' />
+      <Hoverable>
+        {(hover) => <Router foo='bar' hover={hover} />}
+      </Hoverable>
     )
   }
 }
@@ -64,3 +65,29 @@ function withHoverEffect(Component) {
   return Baz;
 }
 
+
+class Hoverable extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      hover: false
+    }
+  }
+  render() {
+    return (
+      <div
+        style={{
+          height: '200px',
+          width: '200px',
+          backgroundColor: this.state.hover ? 'red' : 'green'
+        }}
+        onMouseEnter={() => this.setState({ hover: true })}
+        onMouseLeave={() => this.setState({ hover: false })}
+      >
+        {this.props.children(this.state.hover)}
+        {/* <Component {...this.props} hover={this.state.hover} /> */}
+      </div>
+    )
+  }
+}
