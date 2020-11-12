@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { getUser, updateUser, addUser } from '../server'
+import { unstable_batchedUpdates } from 'react-dom'
 
 const Header = styled.h1``;
 
@@ -10,7 +11,80 @@ const Input = styled.input``;
 const Button = styled.button``;
 const Row = styled.div``;
 
-export default class UserDetail extends React.Component {
+export default function UserDetilInHooks({ userId, onSave, onCancel }) {
+
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+
+  function isEditMode() {
+    return !!userId;
+  }
+
+  useEffect(
+    () => {
+      if (isEditMode()) {
+        getUser(userId)
+          .then(user => {
+            unstable_batchedUpdates(
+              () => {
+                setName(user.name);
+                setUsername(user.username)
+              }
+            )
+          })
+      }
+      else {
+        setName('')
+        setUsername('')
+      }
+    },
+    [userId]
+  )
+
+  function handleSave() {
+    if (isEditMode()) {
+      updateUser({
+        name: name,
+        username: username,
+        id: userId
+      })
+        .then(() => onSave())
+    }
+    else {
+      addUser({
+        name: name,
+        username: username,
+      })
+        .then(() => onSave())
+    }
+  }
+
+  return (
+    <>
+      <Header>User</Header>
+      <Form>
+        <Row>
+          <Label>Name: </Label>
+          <Input
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
+        </Row>
+        <Row>
+          <Label>Username: </Label>
+          <Input
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+        </Row>
+      </Form>
+      <Button onClick={handleSave}>Save</Button>
+      <Button onClick={onCancel}>Cancel</Button>
+    </>
+  )
+}
+
+class UserDetail extends React.Component {
 
   constructor() {
     super();

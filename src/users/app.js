@@ -27,6 +27,7 @@ class Wrapper extends React.Component {
 export default class App extends React.Component {
   render() {
     return (
+      // <Router />
       <Hoverable>
         {(hover) => <Router foo='bar' hover={hover} />}
       </Hoverable>
@@ -34,60 +35,44 @@ export default class App extends React.Component {
   }
 }
 
-const RouterWithHoverEffect = withHoverEffect(Router);
 
-function withHoverEffect(Component) {
-  class Baz extends React.Component {
-    constructor() {
-      super();
 
-      this.state = {
-        hover: false
-      }
-    }
-    render() {
-      return (
-        <div
-          style={{
-            height: '200px',
-            width: '200px',
-            backgroundColor: this.state.hover ? 'red' : 'green'
-          }}
-          onMouseEnter={() => this.setState({ hover: true })}
-          onMouseLeave={() => this.setState({ hover: false })}
-        >
-          <Component {...this.props} hover={this.state.hover} />
-        </div>
-      )
-    }
-  }
-
-  return Baz;
+const withHoverEffect = Component => props => {
+  const [hover, setHover] = React.useState(false);
+  return (
+    <div
+      style={{
+        height: '200px',
+        width: '200px',
+        backgroundColor: hover ? 'red' : 'green'
+      }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <Component {...props} hover={hover} />
+    </div>
+  )
 }
 
+const RouterWithHoverEffect = withHoverEffect(Router);
 
-class Hoverable extends React.Component {
-  constructor() {
-    super();
 
-    this.state = {
-      hover: false
-    }
-  }
-  render() {
-    return (
-      <div
-        style={{
-          height: '200px',
-          width: '200px',
-          backgroundColor: this.state.hover ? 'red' : 'green'
-        }}
-        onMouseEnter={() => this.setState({ hover: true })}
-        onMouseLeave={() => this.setState({ hover: false })}
-      >
-        {this.props.children(this.state.hover)}
-        {/* <Component {...this.props} hover={this.state.hover} /> */}
-      </div>
-    )
-  }
+function Hoverable({ children }) {
+  const [hover, setHover] = React.useState(false);
+
+  return (
+    <div
+      style={{
+        height: '200px',
+        width: '200px',
+        backgroundColor: hover ? 'red' : 'green'
+      }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      {children(hover)}
+      {/* <Component {...this.props} hover={this.state.hover} /> */}
+    </div>
+  )
+
 }

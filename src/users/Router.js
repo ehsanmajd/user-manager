@@ -35,22 +35,17 @@ export default class Router extends React.Component {
   }
 
   render() {
-    console.log('props', this.props)
     return (
       <>
-        <Wrapper visible={this.props.hover}>
-          <UserManager
-            onEdit={this.handleEdit}
-            onAdd={this.handleAdd}
-          />
-        </Wrapper>
-        <Wrapper visible={!this.props.hover}>
-          <UserDetail
-            userId={this.state.editingUserId}
-            onCancel={this.handleCancel}
-            onSave={this.handleSave}
-          />
-        </Wrapper>
+        {this.state.mode === 'list' && <UserManager
+          onEdit={this.handleEdit}
+          onAdd={this.handleAdd}
+        />}
+        {this.state.mode === 'detail' && <UserDetail
+          userId={this.state.editingUserId}
+          onCancel={this.handleCancel}
+          onSave={this.handleSave}
+        />}
       </>
     )
   }
