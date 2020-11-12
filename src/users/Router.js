@@ -2,12 +2,38 @@ import React from 'react';
 import styled from 'styled-components';
 import UserManager from './UserManger';
 import UserDetail from './UserDetail';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useParams,
+  withRouter
+} from "react-router-dom";
 
 const Wrapper = styled.div`
   display: ${props => props.visible ? 'block' : 'none'}
 `
 
-export default class Router extends React.Component {
+const UserDetailWithParams = withRouter(UserDetail);
+
+export default function RouterInHooks() {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/detail/:userId?">
+          <UserDetail />
+        </Route>
+        <Route path="/">
+          <UserManager />
+        </Route>
+      </Switch>
+    </Router>
+  )
+}
+
+class Router2 extends React.Component {
 
   constructor() {
     super();

@@ -10,6 +10,7 @@ export default function UserList({ users = [], onDelete, onEdit }) {
       {users.map(user => {
         return <UserListItem
           key={user.id}
+          id={user.id}
           name={user.name}
           onDelete={() => onDelete(user.id)}
           onEdit={() => onEdit(user.id)}

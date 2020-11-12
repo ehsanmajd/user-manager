@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ListItem from './ListItem';
+import { Link } from 'react-router-dom';
 
 
 const Wrapper = styled.div`
@@ -17,7 +18,9 @@ export default class UserListItem extends React.Component {
       <ListItem>
         <Wrapper>
           <Label>{this.props.name}</Label>
-          <Button onClick={this.props.onEdit}>Edit</Button>
+          <Link to={`/detail/${this.props.id}`}>
+            <Button>Edit</Button>
+          </Link>
           <Button onClick={this.props.onDelete}>Delete</Button>
         </Wrapper>
       </ListItem>

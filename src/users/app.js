@@ -27,10 +27,10 @@ class Wrapper extends React.Component {
 export default class App extends React.Component {
   render() {
     return (
-      // <Router />
-      <Hoverable>
-        {(hover) => <Router foo='bar' hover={hover} />}
-      </Hoverable>
+      <Router />
+      // <Hoverable
+      //   render={(value) => <Router foo='bar' hover={value.hover} />}
+      // />
     )
   }
 }
@@ -57,7 +57,7 @@ const withHoverEffect = Component => props => {
 const RouterWithHoverEffect = withHoverEffect(Router);
 
 
-function Hoverable({ children }) {
+function Hoverable({ render }) {
   const [hover, setHover] = React.useState(false);
 
   return (
@@ -70,7 +70,7 @@ function Hoverable({ children }) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      {children(hover)}
+      {render({ hover: hover })}
       {/* <Component {...this.props} hover={this.state.hover} /> */}
     </div>
   )

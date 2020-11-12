@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import SearchPanel from './SearchPanel';
 import UserList from './UserList';
 import { getUsers, deleteUser } from '../server'
+import { Link } from 'react-router-dom';
 
 const Header = styled.h1`
 `
@@ -47,7 +48,9 @@ export default function UserManagerInHooks({ onEdit, onAdd }) {
         users={users}
       />}
       {loading && <div>Loading ....</div>}
-      <Button onClick={onAdd}>Add</Button>
+      <Link to='/detail/'>
+        <Button>Add</Button>
+      </Link>
     </>
   )
 }

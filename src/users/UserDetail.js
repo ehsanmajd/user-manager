@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { getUser, updateUser, addUser } from '../server'
 import { unstable_batchedUpdates } from 'react-dom'
+import { useParams, Link, useHistory } from 'react-router-dom';
 
 const Header = styled.h1``;
 
@@ -11,8 +12,10 @@ const Input = styled.input``;
 const Button = styled.button``;
 const Row = styled.div``;
 
-export default function UserDetilInHooks({ userId, onSave, onCancel }) {
+export default function UserDetilInHooks() {
 
+  const history = useHistory();
+  const { userId } = useParams();
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
 
@@ -48,14 +51,14 @@ export default function UserDetilInHooks({ userId, onSave, onCancel }) {
         username: username,
         id: userId
       })
-        .then(() => onSave())
+        .then(() => history.push('/'))
     }
     else {
       addUser({
         name: name,
         username: username,
       })
-        .then(() => onSave())
+        .then(() => history.push('/'))
     }
   }
 
@@ -79,7 +82,9 @@ export default function UserDetilInHooks({ userId, onSave, onCancel }) {
         </Row>
       </Form>
       <Button onClick={handleSave}>Save</Button>
-      <Button onClick={onCancel}>Cancel</Button>
+      <Link to='/'>
+        <Button>Cancel</Button>
+      </Link>
     </>
   )
 }
