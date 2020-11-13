@@ -1,28 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import styled from 'styled-components';
 import SearchPanel from './SearchPanel';
 import UserList from './UserList';
 import { getUsers, deleteUser } from '../server'
 import { Link } from 'react-router-dom';
+import { reducer, ACTIONS } from './usersReducer';
 
 const Header = styled.h1`
 `
 const Button = styled.button`
 `
 export default function UserManagerInHooks({ onEdit, onAdd }) {
-  const [keyword, setKeyword] = useState('');
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [keyword, setKeyword] = useState('');
+  // const [users, setUsers] = useState([]);
+  // const [loading, setLoading] = useState(false);
 
-  const handleKeywordChange = e => {
-    setKeyword(e.target.value);
-  }
+  const [{ keyword, users, loading }, dispatch] = useReducer(reducer, {
+    keyword: '',
+    users: [],
+    loading: false
+  })
+
+  // const handleKeywordChange = e => {
+  //   dispatch({
+  //     type: ACTIONS.KEYWORD_CHANGE,
+  //     payload: e.target.value
+  //   })
+  //   // setKeyword(e.target.value);
+  // }
 
   const handleSearch = async () => {
-    setLoading(true);
+    dispatch({
+      type: ACTIONS.LOADING
+    });
+    // setLoading(true);
     const users = await getUsers(keyword);
-    setUsers(users);
-    setLoading(false);
+    dispatch({
+      type: ACTIONS.USERS_LOADED,
+      payload: users
+    })
+    // setUsers(users);
+    // setLoading(false);
   }
 
   const handleDelete = async (id) => {
@@ -40,7 +58,7 @@ export default function UserManagerInHooks({ onEdit, onAdd }) {
       <SearchPanel
         keyword={keyword}
         onSearch={handleSearch}
-        onKeywordChange={handleKeywordChange}
+        dispatch={dispatch}
       />
       {!loading && <UserList
         onDelete={handleDelete}

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import styled from 'styled-components';
 import { getUser, updateUser, addUser } from '../server'
-import { unstable_batchedUpdates } from 'react-dom'
 import { useParams, Link, useHistory } from 'react-router-dom';
+import { reducer, ACTIONS } from './reducer'
 
 const Header = styled.h1``;
 
@@ -12,12 +12,21 @@ const Input = styled.input``;
 const Button = styled.button``;
 const Row = styled.div``;
 
+
+
 export default function UserDetilInHooks() {
+
+  const [state, dispatch] = useReducer(reducer, {
+    name: '',
+    username: ''
+  })
+  const name = state.name;
+  const username = state.username;
 
   const history = useHistory();
   const { userId } = useParams();
-  const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
+  // const [name, setName] = useState('');
+  // const [username, setUsername] = useState('');
 
   function isEditMode() {
     return !!userId;
@@ -28,17 +37,21 @@ export default function UserDetilInHooks() {
       if (isEditMode()) {
         getUser(userId)
           .then(user => {
-            unstable_batchedUpdates(
-              () => {
-                setName(user.name);
-                setUsername(user.username)
-              }
-            )
+            const action = {
+              type: ACTIONS.USER_LOADED,
+              payload: user
+            };
+
+            dispatch(action);
           })
       }
       else {
-        setName('')
-        setUsername('')
+        const action = {
+          type: ACTIONS.RESET_FORM,
+          payload: undefined
+        }
+        dispatch(action);
+
       }
     },
     [userId]
@@ -70,19 +83,33 @@ export default function UserDetilInHooks() {
           <Label>Name: </Label>
           <Input
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={e =>
+              dispatch({
+                type: ACTIONS.INPUT_CHANGE,
+                payload: {
+                  name: 'name',
+                  value: e.target.value
+                }
+              })}
           />
         </Row>
         <Row>
           <Label>Username: </Label>
           <Input
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={e =>
+              dispatch({
+                type: ACTIONS.INPUT_CHANGE,
+                payload: {
+                  name: 'username',
+                  value: e.target.value
+                }
+              })}
           />
         </Row>
       </Form>
       <Button onClick={handleSave}>Save</Button>
-      <Link to='/'>
+      <Link to={'/'}>
         <Button>Cancel</Button>
       </Link>
     </>

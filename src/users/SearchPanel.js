@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { ACTIONS } from './usersReducer';
 
 const Input = styled.input`
 `
@@ -10,7 +11,7 @@ const Button = styled.button`
 const Wrapper = styled.div`
 `
 
-export default function SearchPanel2({ onSearch, keyword, onKeywordChange }) {
+export default function SearchPanel2({ onSearch, keyword, dispatch }) {
   const inputRef = useRef();
 
   useEffect(
@@ -20,9 +21,17 @@ export default function SearchPanel2({ onSearch, keyword, onKeywordChange }) {
     []
   );
 
+  function handleChange(e) {
+    dispatch({
+      type: ACTIONS.KEYWORD_CHANGE,
+      payload: e.target.value
+    })
+  }
+
+
   return (
     <Wrapper>
-      <Input ref={inputRef} value={keyword} onChange={onKeywordChange} />
+      <Input ref={inputRef} value={keyword} onChange={handleChange} />
       <Button onClick={onSearch}>Search</Button>
     </Wrapper>
   )
