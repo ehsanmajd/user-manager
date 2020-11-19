@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './custom-hooks/app';
+import App from './lazy/app';
 
 
 ReactDOM.render(
