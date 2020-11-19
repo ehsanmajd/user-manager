@@ -5,42 +5,48 @@ import UserList from './UserList';
 import { getUsers, deleteUser } from '../server'
 import { Link } from 'react-router-dom';
 import { reducer, ACTIONS } from './usersReducer';
+import { loading as setLoading, searchUsers, userLoaded } from './actionCreator';
 
 const Header = styled.h1`
 `
 const Button = styled.button`
 `
+
+function useMyReducer(reducer, initState) {
+
+  const [state, dispatch] = useReducer(reducer, initState)
+
+  return [
+    state,
+    action => {
+      if (typeof action === 'function') {
+        action(dispatch, () => state)
+      }
+      else {
+        dispatch(action);
+      }
+    }
+  ]
+}
+
 export default function UserManagerInHooks({ onEdit, onAdd }) {
   // const [keyword, setKeyword] = useState('');
   // const [users, setUsers] = useState([]);
   // const [loading, setLoading] = useState(false);
 
-  const [{ keyword, users, loading }, dispatch] = useReducer(reducer, {
+  const [{ keyword, users, loading }, dispatch] = useMyReducer(reducer, {
     keyword: '',
     users: [],
     loading: false
   })
 
-  // const handleKeywordChange = e => {
-  //   dispatch({
-  //     type: ACTIONS.KEYWORD_CHANGE,
-  //     payload: e.target.value
-  //   })
-  //   // setKeyword(e.target.value);
-  // }
-
   const handleSearch = async () => {
-    dispatch({
-      type: ACTIONS.LOADING
-    });
-    // setLoading(true);
-    const users = await getUsers(keyword);
-    dispatch({
-      type: ACTIONS.USERS_LOADED,
-      payload: users
-    })
-    // setUsers(users);
-    // setLoading(false);
+
+    dispatch(searchUsers())
+
+    // dispatch(setLoading());
+    // const users = await getUsers(keyword);
+    // dispatch(userLoaded(users))
   }
 
   const handleDelete = async (id) => {
