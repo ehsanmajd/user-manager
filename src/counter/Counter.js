@@ -1,15 +1,25 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useDispatch, useCounterState } from './CounterContext';
+
 
 export default function Counter() {
   const dispatch = useDispatch();
   const value = useCounterState();
 
-  function handleInc() {
-    dispatch({
-      type: 'INC'
-    })
-  }
+  const handleInc = useCallback(
+    () => {
+      dispatch({
+        type: 'INC'
+      })
+    },
+    [dispatch]
+  )
+
+  // function handleInc() {
+  //   dispatch({
+  //     type: 'INC'
+  //   })
+  // }
 
   function handleDec() {
     dispatch({
@@ -25,4 +35,3 @@ export default function Counter() {
     </div>
   )
 }
-
