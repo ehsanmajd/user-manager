@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Token from './Token';
 import { ACTIONS } from './reducer';
 import { DispatchContext, withDispatch } from './DispatchContext';
+import { useDispatch } from 'react-redux';
 
 const Wrapper = styled.div`
 `
@@ -19,7 +20,7 @@ const TokenWrapper = styled.div`
 `
 
 function Filter({ filterItems = [] }) {
-  const dispatch = React.useContext(DispatchContext)
+  const dispatch = useDispatch();
   return (
     <Wrapper>
       <Row>

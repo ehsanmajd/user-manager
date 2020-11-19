@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Card from './Card'
+import { useSelector } from 'react-redux'
 
 const Warpper = styled.div`
   display: flex;
@@ -8,7 +9,10 @@ const Warpper = styled.div`
 
 `
 
-export default function ProductList({ products = [] }) {
+export default function ProductList() {
+  const products = useSelector(state => {
+    return state.main.products
+  });
   return (
     <Warpper>
       {

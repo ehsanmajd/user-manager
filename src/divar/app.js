@@ -7,13 +7,17 @@ import Filter from './Filter';
 import { getData } from './server';
 import Loading from './Loading';
 import { ACTIONS, reducer } from './reducer';
-import { DispatchContext } from './DispatchContext'
-
+import { reducer2 } from './reducer2';
+import { DispatchContext } from './DispatchContext';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider, useSelector, useDispatch } from 'react-redux'
+import thunk from 'redux-thunk';
+import { filterData } from './actionCreators';
+import logger from 'redux-logger'
 
 
 const Wrapper = styled.div`
   display: flex;
-
 `;
 const Side = styled.div`
   width: 30%;
@@ -22,63 +26,89 @@ const Main = styled.div`
   flex: 1;
 `;
 
-export default function App() {
-  const [state, dispatch] = useReducer(reducer,
-    {
-      loading: true,
-      products: [],
-      filters: [
-        {
-          text: 'Chattable',
-          id: '1',
-          selected: false
-        },
-        {
-          text: 'withoutPrice',
-          id: '2',
-          selected: false
-        },
-        {
-          text: 'condition',
-          id: '3',
-          selected: false
-        }
-      ]
+const rootReducer = combineReducers({
+  main: reducer,
+  other: reducer2,
+});
+const store = createStore(rootReducer, applyMiddleware(thunk, logger))
+
+function App() {
+  const dispatch = useDispatch();
+
+  const { filters, loading } = useSelector(state => {
+    return {
+      filters: state.main.filters,
+      loading: state.main.loading
     }
-  )
+  });
+
   const selectedFilters = React.useMemo(
-    () => state.filters.filter(x => x.selected),
-    [state.filters]
-  )
+    () => filters.filter(x => x.selected),
+    [filters]
+  );
 
   useEffect(
     () => {
-      getData(selectedFilters)
-        .then(data => {
-          dispatch({ type: ACTIONS.PRODUCTS_LOADED, payload: data })
-        })
+      dispatch(filterData(selectedFilters))
+      // getData(selectedFilters)
+      //   .then(data => {
+      //     dispatch({ type: ACTIONS.PRODUCTS_LOADED, payload: data })
+      //   })
     },
     [selectedFilters]
   )
 
   return (
-    <DispatchContext.Provider value={dispatch}>
-      <Wrapper>
-        <Side>
-          <Filter
-            filterItems={selectedFilters}
-          />
-          <FilterPanel
-            filters={state.filters}
-          />
-        </Side>
-        <Main>
-          {!state.loading && <ProductList
-            products={state.products}
-          />}
-          {state.loading && <Loading />}
-        </Main>
-      </Wrapper>
-    </DispatchContext.Provider>
+    <Wrapper>
+      <Side>
+        <Filter
+          filterItems={selectedFilters}
+        />
+        <FilterPanel
+          filters={filters}
+        />
+      </Side>
+      <Main>
+        {!loading && <ProductList
+        />}
+        {loading && <Loading />}
+      </Main>
+    </Wrapper>
   )
+}
+
+
+export default () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  )
+}
+
+const STATE = {
+  main: {
+    loading: true,
+    products: [],
+    filters: [
+      {
+        text: 'Chattable',
+        id: '1',
+        selected: false
+      },
+      {
+        text: 'withoutPrice',
+        id: '2',
+        selected: false
+      },
+      {
+        text: 'condition',
+        id: '3',
+        selected: false
+      }
+    ]
+  },
+  other: {
+    message: 'Hello !'
+  }
 }

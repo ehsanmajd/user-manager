@@ -3,6 +3,7 @@ import Switch from './Switch';
 import styled from 'styled-components';
 import { ACTIONS } from './reducer';
 import { withDispatch } from './DispatchContext';
+import { useDispatch } from 'react-redux'
 
 const Wrapper = styled.div`
 `
@@ -25,9 +26,10 @@ const FiterItem = ({ text, on, onChange }) => {
 }
 
 function FilterPanel({
-  filters,
-  dispatch
+  filters
+  
 }) {
+  const dispatch = useDispatch();
   return (
     <Wrapper>
       {filters.map(item => (
@@ -50,4 +52,4 @@ function FilterPanel({
   )
 }
 
-export default withDispatch(FilterPanel);
+export default FilterPanel;

@@ -1,5 +1,26 @@
-export function reducer(state, action) {
+const INIT_STATE = {
+  loading: true,
+  products: [],
+  filters: [
+    {
+      text: 'Chattable',
+      id: '1',
+      selected: false
+    },
+    {
+      text: 'withoutPrice',
+      id: '2',
+      selected: false
+    },
+    {
+      text: 'condition',
+      id: '3',
+      selected: false
+    }
+  ]
+}
 
+export function reducer(state = INIT_STATE, action) {
   return (HANDLERS[action.type] ||
     (() => state))(state, action.payload)
 }
