@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  display: flex;
+  display: block;
   border: solid 1px #ccc;
   margin: 20px;
 `
@@ -23,9 +23,25 @@ export default function Card({
   condition,
   chatLocked
 }) {
+
+  
+  // function test() {
+
+  // }
+
+  // useEffect(
+  //   () => {
+  //     document.addEventListener('click',test)
+  //     return () => {
+  //       document.removeEventListener(test)
+  //     }
+  //   },
+  //   [test]
+  // )
+
   return (
     <Wrapper>
-      
+
       <Column>
         <Title>{title}</Title>
         <ConditionWrapper>
@@ -36,7 +52,7 @@ export default function Card({
         </ConditionWrapper>
       </Column>
       <Column>
-        <img  alt='Image' />
+        <img alt='Image' />
       </Column>
     </Wrapper>
   )

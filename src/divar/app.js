@@ -13,7 +13,6 @@ import { DispatchContext } from './DispatchContext'
 
 const Wrapper = styled.div`
   display: flex;
-
 `;
 const Side = styled.div`
   width: 30%;
@@ -51,6 +50,8 @@ export default function App() {
     [state.filters]
   )
 
+  //const selectedFilters = state.filters.filter(x => x.selected);
+
   useEffect(
     () => {
       getData(selectedFilters)
@@ -60,6 +61,15 @@ export default function App() {
     },
     [selectedFilters]
   )
+
+  console.log(state.filters);
+
+  // const handleChange = useCallback(
+  //   function (e) {
+
+  //   },
+  //   []
+  // )
 
   return (
     <DispatchContext.Provider value={dispatch}>
@@ -82,3 +92,5 @@ export default function App() {
     </DispatchContext.Provider>
   )
 }
+
+

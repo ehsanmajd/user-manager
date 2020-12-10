@@ -50,7 +50,7 @@ function fakeApiCall(value) {
       () => {
         resolve(value)
       },
-      1000
+      10
     )
   })
 }
